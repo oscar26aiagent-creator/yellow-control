@@ -1,21 +1,31 @@
-# Yellow-Control governance references
+# yellow-control-governance references index
 
-Canonical docs are under ../../docs/.
+Use this index for progressive disclosure. Keep SKILL.md concise and use these references for detail.
 
-## Index
+## Canonical concept references
 
-- ../../docs/authority-model.md
-- ../../docs/backup-and-rollback.md
-- ../../docs/external-service-governance.md
-- ../../docs/external-systems-package-pattern.md
-- ../../docs/github-governance.md
-- ../../docs/governance-model.md
-- ../../docs/governance-telemetry.md
-- ../../docs/hermes-skill-submission-readiness.md
-- ../../docs/policy-gates.md
-- ../../docs/runtime-classification.md
-- ../../docs/runtime-maintenance-governance.md
-- ../../docs/scope-boundaries.md
-- ../../docs/secrets-handling.md
+- [Authority model](../../../docs/concepts/authority-model.md)
+- [ADAL](../../../docs/concepts/adal.md)
+- [CDEL](../../../docs/concepts/cdel.md)
+- [ESAL](../../../docs/concepts/esal.md)
+- [PCL](../../../docs/concepts/pcl.md)
+- [Policy gates](../../../docs/concepts/policy-gates.md)
+- [Backup and rollback](../../../docs/concepts/backup-and-rollback.md)
 
-Skill-specific references are public-safe derivatives.
+## Register references
+
+- [External service register](../../../docs/registers/external-service-register.md)
+- [Project register](../../../docs/registers/project-register.md)
+- [Runtime register](../../../docs/registers/runtime-register.md)
+- [Skill register](../../../docs/registers/skill-register.md)
+
+## Procedure references
+
+- [External service onboarding](../../../docs/procedures/external-service-onboarding.md)
+- [Runtime maintenance governance](../../../docs/procedures/runtime-maintenance-governance.md)
+- [GitHub governance](../../../docs/procedures/github-governance.md)
+- [Secrets handling](../../../docs/procedures/secrets-handling.md)
+- [Governance telemetry](../../../docs/procedures/governance-telemetry.md)
+
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13

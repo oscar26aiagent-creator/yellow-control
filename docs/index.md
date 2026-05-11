@@ -45,7 +45,7 @@ Start with [README.md](../README.md), review [docs/audits/v0.1.3-baseline-audit.
 | Concept split docs | Current |
 | Register docs and examples | Current |
 | Procedures and operator workflows | Current |
-| Hermes skill alignment package | Planned for Milestone 5 |
+| Hermes skill alignment package | Current |
 | Final validation package | Planned for Milestone 6 |
 
 ## Milestone 0 audit references
