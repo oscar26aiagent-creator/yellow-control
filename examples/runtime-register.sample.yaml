@@ -1,0 +1,8 @@
+# Fictional example only
+runtime_id: "runtime-example-dev"
+runtime_class: "local"
+adal_baseline: "ADAL-1"
+cdel_baseline: "CDEL-1"
+backup_status: "checkpoint-required-before-runtime-change"
+maintenance_cadence: "weekly"
+approval_model: "human-approval-required-for-privileged-actions"

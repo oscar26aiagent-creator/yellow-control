@@ -1,0 +1,21 @@
+# Fictional example only
+decision_id: "gdr-20260511-0001"
+action_summary: "update public governance concept docs"
+classifications:
+  adal: "ADAL-1"
+  cdel: "CDEL-1"
+  esal: "ESAL-2"
+  pcl: "PCL-0"
+gate_outcomes:
+  authority_gate: "pass"
+  scope_gate: "pass"
+  backup_gate: "pass"
+  rollback_gate: "pass"
+  confidentiality_gate: "pass"
+  external_service_gate: "pass"
+  repository_gate: "pass"
+  automation_gate: "pass"
+final_decision: "allow"
+rationale: "bounded public documentation update"
+approved_by: "governance-owner@example.invalid"
+reviewed_at: "2026-05-11"

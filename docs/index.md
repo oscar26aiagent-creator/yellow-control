@@ -39,11 +39,11 @@ Start with [README.md](../README.md), review [docs/audits/v0.1.3-baseline-audit.
 
 ## Status by documentation area
 
-| Area | Status in Milestone 1 |
+| Area | Current status |
 |---|---|
 | Front door docs (README, index, architecture) | Current |
-| Concept split docs | Planned for Milestone 2 |
-| Register docs and examples | Planned for Milestone 3 |
+| Concept split docs | Current |
+| Register docs and examples | Current |
 | Procedures and operator workflows | Planned for Milestone 4 |
 | Hermes skill alignment package | Planned for Milestone 5 |
 | Final validation package | Planned for Milestone 6 |
