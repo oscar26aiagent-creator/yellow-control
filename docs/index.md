@@ -44,7 +44,7 @@ Start with [README.md](../README.md), review [docs/audits/v0.1.3-baseline-audit.
 | Front door docs (README, index, architecture) | Current |
 | Concept split docs | Current |
 | Register docs and examples | Current |
-| Procedures and operator workflows | Planned for Milestone 4 |
+| Procedures and operator workflows | Current |
 | Hermes skill alignment package | Planned for Milestone 5 |
 | Final validation package | Planned for Milestone 6 |
 
