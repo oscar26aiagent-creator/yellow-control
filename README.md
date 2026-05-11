@@ -29,10 +29,10 @@ Yellow-Control is a public-safe governance documentation repository for operatin
 
 | Area | Summary |
 |---|---|
-| Governance model | Uses ADAL/CDEL/ESAL/PCL concepts to classify actions and apply gates |
-| Safety posture | Requires explicit authority checks, backup/rollback discipline, and confidentiality boundaries |
-| Runtime alignment | Designed to be Hermes-compatible without claiming official endorsement |
-| Artifacts | Public docs, governance concepts, templates, and examples |
+| Governance model | Uses ADAL/CDEL/ESAL/PCL concepts to classify actions and apply gates. |
+| Safety posture | Requires explicit authority checks, backup/rollback discipline, and confidentiality boundaries. |
+| Runtime alignment | Designed to be Hermes-compatible without claiming official endorsement. |
+| Artifacts | Public docs, governance concepts, templates, and examples. |
 
 ## Documentation map
 
