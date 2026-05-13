@@ -1,14 +1,10 @@
-# Backup Gate Checklist (Fictional Example)
+# Backup Gate Checklist
 
-Use this checklist before runtime-changing actions.
+Fictional example checklist.
 
-- [ ] Scope approved
-- [ ] Classification recorded (ADAL/CDEL/ESAL/PCL)
-- [ ] Pre-change checkpoint captured
-- [ ] Rollback method documented
-- [ ] Post-change validation plan prepared
-- [ ] Approval reference captured
-- [ ] Telemetry record template prepared
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- Define action scope and risk.
+- Confirm checkpoint exists before risky action.
+- Confirm rollback method and owner.
+- Confirm validation criteria after execution.
+- Record evidence references.
+- Stop and defer when rollback readiness is incomplete.

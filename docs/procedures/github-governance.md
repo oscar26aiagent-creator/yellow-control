@@ -1,32 +1,52 @@
-# GitHub Governance Procedure
+# GitHub Governance
 
-This procedure defines safe repository workflow for governed documentation changes.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+
+## Purpose
+
+Define governance workflow for repository operations as an external-access workflow.
+
+## Scope
+
+This procedure covers branch-based contribution and review flows.
+It does not grant ownership-level account authority.
 
 ## Baseline rules
 
-- normal pushes target origin fork branch,
-- upstream push requires explicit human instruction,
-- branch must be scoped and reviewable.
+- Classify action under ESAL and PCL before execution.
+- Prefer fork and pull request workflow.
+- Keep changes scoped and reviewable.
+- No direct upstream push without explicit authority.
 
-## Steps
+## Standard workflow
 
-1. Verify remotes and current branch.
-2. Confirm scope and milestone boundaries.
-3. Commit coherent checkpoint changes.
-4. Push to origin branch.
-5. Run validation scans.
-6. Open review workflow when requested by authority.
+1. Confirm repository target and approved remote.
+2. Create or switch to scoped working branch.
+3. Apply changes and run required validations.
+4. Commit with clear message.
+5. Push to approved remote scope.
+6. Open review request when required.
+7. Record governance decision summary.
 
-## Defer and block conditions
+## High-risk actions
 
-Defer when branch or remotes are ambiguous.
-Block when change requests require upstream mutation without explicit instruction.
+The following require elevated approval:
 
-## Safety constraints
+- force push on shared protected branch;
+- branch protection changes;
+- ownership or recovery changes;
+- destructive history rewrites on canonical branch.
 
-- no secret material in commits,
-- no private operational identifiers in public docs,
-- no destructive history rewrites without explicit approval.
+## Decision handling
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+| Condition | Decision |
+|---|---|
+| Fork-scope branch update with validated docs | Allow |
+| Ambiguous remote ownership or branch target | Defer |
+| Unauthorized upstream write request | Block |
+
+## Related documents
+
+- [External Access Register](../registers/external-access-register.md)
+- [Policy Gates](../concepts/policy-gates.md)

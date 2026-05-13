@@ -1,21 +1,21 @@
-# Fictional example only
-decision_id: "gdr-20260511-0001"
-action_summary: "update public governance concept docs"
-classifications:
+# Fictional sample only.
+record_id: "gdr-0001"
+timestamp: "2026-05-12T12:00:00Z"
+action_summary: "Update policy-gate documentation"
+classification:
   adal: "ADAL-1"
-  cdel: "CDEL-1"
-  esal: "ESAL-2"
+  cdel: "CDEL-0"
+  esal: "ESAL-3"
   pcl: "PCL-0"
-gate_outcomes:
-  authority_gate: "pass"
-  scope_gate: "pass"
-  backup_gate: "pass"
-  rollback_gate: "pass"
-  confidentiality_gate: "pass"
-  external_service_gate: "pass"
-  repository_gate: "pass"
-  automation_gate: "pass"
-final_decision: "allow"
-rationale: "bounded public documentation update"
-approved_by: "governance-owner@example.invalid"
-reviewed_at: "2026-05-11"
+gate_results:
+  authority_gate: "allow"
+  scope_gate: "allow"
+  backup_rollback_gate: "allow"
+  external_access_gate: "allow"
+  confidentiality_gate: "allow"
+  automation_persistence_gate: "allow"
+decision: "allow"
+evidence_refs:
+  - "commit://samplehash"
+  - "validation://lint-pass"
+notes: "Fictional sample for format guidance only."
