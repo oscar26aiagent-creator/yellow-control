@@ -1,97 +1,99 @@
 # Authority Model
 
-The authority model separates accountable human authority from delegated agent execution.
-It defines who can approve, who can operate, and when work must defer or block.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+
+## Purpose
+
+This model defines who is accountable, who executes, and how a governed agent behaves.
+It exists to prevent silent privilege drift and to keep decision authority human-led.
 
 ## Core roles
 
-### Accountable authority
+| Role | Responsibility | Typical actions | Cannot do alone |
+|---|---|---|---|
+| Accountable authority | Final governance authority | Approve high-risk actions, approve scope changes, approve external expansion | Delegate accountability to automation |
+| Maintainer or operator | Day-to-day implementation and review | Prepare changes, run validated procedures, collect evidence | Self-approve authority expansion |
+| Governed agent | Execute delegated tasks within policy gates | Classify ADAL/CDEL/ESAL/PCL, propose allow/defer/block, produce traceable outputs | Self-grant privilege or redefine authority |
 
-The accountable authority is the final human decision owner for governance boundaries, approval, and escalation acceptance.
+## Human authority is mandatory
 
-### Owner/operator
+The accountable authority remains human.
+Automation may support decisions but does not replace authority proof.
+If authority is unclear, outcome is defer or block.
 
-The owner/operator defines mission intent, approves scope, and decides whether high-impact actions proceed.
+## Operational context versus authority proof
 
-### Maintainer/operator
-
-Maintainer/operators implement approved changes within delegated scope and provide evidence and validation outcomes.
-
-### Governed agent
-
-The governed agent executes approved tasks, proposes escalations when needed, and must not self-grant authority.
-
-### Hermes-compatible runtime
-
-The runtime is an execution environment that can host tools, automation, and policy workflows.
-Runtime capability does not override governance authority requirements.
-
-## Operational trust versus authority proof
-
-Operational trust describes confidence in execution quality.
-Authority proof describes permission to perform an action.
-Trust can support approval decisions but cannot replace explicit authority proof.
-
-## No self-granting principle
-
-The agent may classify, propose, and prepare evidence.
-The agent must not approve its own authority expansion.
+Operational context means observed environment state.
+Authority proof means explicit approval, delegated scope, and policy alignment.
+Context without authority proof is insufficient for risky execution.
 
 ## Delegation boundaries
 
-Delegation boundaries must be explicit across:
+Delegation is bounded by:
 
-- functional scope,
-- environment scope,
-- time window,
-- rollback obligation,
-- telemetry expectation.
+- declared objective and scope;
+- ADAL/CDEL/ESAL/PCL classification;
+- register and procedure prerequisites;
+- approval level required for the action class.
 
-Outside that boundary, actions defer or block.
+Actions outside bounds must be deferred.
 
-## Approval, defer, and block logic
+## No self-granting principle
 
-| Condition | Decision |
-|---|---|
-| Scope is approved, evidence complete, classification valid | Allow |
-| Scope is plausible but authority or evidence is incomplete | Defer |
-| Scope conflicts with policy or confidentiality/safety constraints | Block |
+A governed agent may not:
+
+- promote its own authority class;
+- bypass required approvals;
+- reinterpret a block as approval;
+- operationalize unknown authority.
+
+Unknown authority defaults to no operational authority.
+
+## Decision outcomes
+
+| Outcome | When used | Required response |
+|---|---|---|
+| Allow | Scope and authority are confirmed, prerequisites satisfied | Execute with controls and record telemetry |
+| Defer | Missing approval, incomplete evidence, or ambiguous classification | Request exact missing evidence or approval |
+| Block | Explicit policy violation or prohibited action | Stop execution and report rationale |
 
 ## Emergency stop logic
 
-Emergency stop should be triggered when:
+Immediate block and report when any of the following is detected:
 
-- active action exceeds approved scope,
-- safety controls fail,
-- rollback readiness is lost,
-- authority conflict is discovered.
+- attempted privilege self-granting;
+- confidentiality boundary breach;
+- missing backup/rollback gate for risky action;
+- unknown external target ownership or recovery custody;
+- requested action outside approved scope.
 
-Stop action should preserve evidence and notify accountable authority.
+## Governance evidence expectations
 
-## Public-safe role table
+For authority-sensitive actions, keep evidence concise and reviewable:
 
-| Role | Can classify | Can execute | Can approve escalation | Can alter recovery custody |
-|---|---|---|---|---|
-| Accountable authority | Yes | Optional | Yes | Yes, with strict controls |
-| Owner/operator | Yes | Optional | Yes, within governance model | Usually via accountable authority path |
-| Maintainer/operator | Yes | Yes, within approved scope | No | No |
-| Governed agent | Yes | Yes, within approved scope | No | No |
+- classification summary;
+- gate outcomes;
+- approvals referenced;
+- pre-check and post-check results;
+- defer or block rationale when applicable.
 
-## Evidence expectations by role
+Do not include plaintext secrets in evidence artifacts.
 
-- authority source reference,
-- scope statement,
-- pre-change checkpoint evidence,
-- post-change validation evidence,
-- defer/block rationale when applicable.
+## Relationship to other concepts
 
-## Related concepts
+This model drives:
+
+- ADAL/CDEL/ESAL/PCL classification behavior;
+- policy-gate allow/defer/block logic;
+- backup and rollback gate enforcement;
+- external access governance procedures.
+
+See also:
 
 - [Agent Delegated Administration Level (ADAL)](adal.md)
-- [Container/Sandbox Delegation Level (CDEL)](cdel.md)
-- [External Service Authority Level (ESAL)](esal.md)
+- [Container Delegated Execution Level (CDEL)](cdel.md)
+- [External Service Access Level (ESAL)](esal.md)
 - [Project Confidentiality Level (PCL)](pcl.md)
-- [Policy gates](policy-gates.md)
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- [Policy Gates](policy-gates.md)
+- [Backup and Rollback](backup-and-rollback.md)

@@ -1,79 +1,78 @@
-# Container/Sandbox Delegation Level (CDEL)
+# Container Delegated Execution Level (CDEL)
 
-CDEL defines delegated authority within container and sandbox execution boundaries.
-It separates container-local action from host-impacting risk.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
 ## Purpose
 
-CDEL prevents false assumptions that container access is automatically safe.
-It provides a boundary-aware decision model for allow, defer, and block outcomes.
+CDEL classifies delegated authority for containerized or sandboxed execution.
+It describes containment boundaries and escalation risks.
+
+## Why CDEL matters
+
+Container context can be mistaken for safe isolation.
+CDEL makes boundary strength explicit and prevents hidden host escalation.
 
 ## CDEL level table
 
-| Level | Boundary posture | Typical allow examples | Typical defer/block examples |
+| Level | Meaning | Typical examples | Default decision |
 |---|---|---|---|
-| CDEL-0 | Read-only sandbox visibility | Inspect metadata and approved logs | Any mutation |
-| CDEL-1 | Non-privileged container tasks | Run tests, compile, static checks | Host namespace mutation |
-| CDEL-2 | Controlled container mutation | Scoped package/config edits in container | Host filesystem writes |
-| CDEL-3 | Privileged container operations | Approved maintenance in elevated container | Unapproved host escape vectors |
-| CDEL-4 | Host-adjacent orchestration impact | Controlled platform-level config changes with approval | Unbounded cluster-wide authority changes |
+| CDEL-0 | No container interaction | Documentation-only work | Allow |
+| CDEL-1 | Read-only container metadata | Inspect image tags and manifests | Allow |
+| CDEL-2 | Non-privileged container execution | Run approved read-only checks | Allow with logging |
+| CDEL-3 | Elevated container operations | Build/run with expanded permissions | Defer unless approved |
+| CDEL-4 | Host-adjacent control | Bind mounts to sensitive paths, host networking changes | Defer by default |
+| CDEL-5 | Host-equivalent control through container path | Privileged mode or unsafe socket pathways | Block without explicit authority |
 
-## Sandbox, container, and host boundaries
+## Boundary model
 
-Containers are isolation controls, not absolute trust boundaries.
-Boundary weakening patterns include privileged mode, broad host mounts, and over-permissive namespace sharing.
-When those patterns exist, CDEL classification should increase accordingly.
+Container and sandbox boundaries are policy-relevant only when enforced.
+A weak boundary can collapse into host-level control.
 
-## Safe versus risky authority examples
+## High-risk patterns
 
-| Pattern | Assessment | Rationale |
+Examples of high-risk pathways:
+
+- privileged container mode without strict approval;
+- unrestricted host mounts;
+- docker-socket mediated control chains.
+
+These patterns are treated as high authority even if invoked from a container.
+
+## Safe versus risky examples
+
+| Example | CDEL interpretation | Outcome |
 |---|---|---|
-| Non-privileged docs build in isolated container | Safer | Minimal host interaction |
-| Test execution with read-only mounts | Safer | Controlled write surface |
-| Container with host root mounted read-write | Risky | Effective boundary collapse |
-| Privileged container with unrestricted device access | Risky | Expanded host impact potential |
-
-## Defer and block examples
-
-| Scenario | Decision | Reason |
-|---|---|---|
-| Run non-privileged test suite in sandbox | Allow | Fits CDEL-1 scope |
-| Add privileged runtime flag for convenience | Defer | Needs explicit authority and justification |
-| Attempt host namespace manipulation from container | Block by default | Boundary bypass risk |
+| Read-only container image inspection | CDEL-1 | Allow |
+| Non-privileged read-only diagnostics in isolated container | CDEL-2 | Allow with controls |
+| Launch privileged container for convenience | CDEL-5-like risk | Block unless explicitly approved |
+| Use host-sensitive bind mount to modify system state | CDEL-4/5 | Defer or block |
 
 ## Relationship with ADAL
 
-ADAL and CDEL are complementary:
+ADAL governs host administrative delegation.
+CDEL governs containerized execution pathways.
+If container action can affect host control, evaluate both ADAL and CDEL and use stricter outcome.
 
-- ADAL governs delegated administration authority,
-- CDEL governs sandbox/container boundary authority.
+## Defer and block examples
 
-A task can be low ADAL and still high CDEL risk if boundary controls are weak.
-Both classifications should be evaluated together.
+Defer when approval exists in principle but evidence is incomplete.
+Block when a prohibited high-risk boundary crossing is requested.
 
-## Required evidence for higher CDEL actions
+## Required evidence
 
-Before higher CDEL approval, gather:
+Before elevated container actions:
 
-- runtime configuration summary,
-- mount/network privilege review,
-- host-impact statement,
-- rollback or recreate strategy,
-- accountable approval evidence.
+- container boundary description;
+- expected host impact;
+- allowed action list;
+- approval reference;
+- rollback plan for container-driven host effects.
 
-## Operational guardrails
+## Related documentation
 
-- prefer least-privilege container defaults,
-- prefer rebuild-first patterns over manual drift,
-- keep elevated permissions temporary,
-- record telemetry for each allow/defer/block decision.
-
-## Related concepts and registers
-
+- [Authority Model](authority-model.md)
 - [Agent Delegated Administration Level (ADAL)](adal.md)
-- [Policy gates](policy-gates.md)
-- [Backup and rollback](backup-and-rollback.md)
-- [Runtime register](../registers/runtime-register.md)
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- [External Service Access Level (ESAL)](esal.md)
+- [Policy Gates](policy-gates.md)
+- [Backup and Rollback](backup-and-rollback.md)

@@ -1,73 +1,80 @@
 # Project Confidentiality Level (PCL)
 
-PCL defines confidentiality boundaries for project artifacts, governance decisions, and operational evidence.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
 ## Purpose
 
-PCL reduces accidental disclosure risk by forcing explicit publication boundaries before content is shared.
+PCL classifies information disclosure boundaries for project artifacts and governance evidence.
+It defines what may be public, restricted, or private.
+
+## Default rule
+
+If confidentiality classification is unknown, default to private handling.
+No publication occurs until classification is explicit.
 
 ## PCL level table
 
-| Level | Classification | Sharing posture | Typical examples |
+| Level | Meaning | Typical content | Publication default |
 |---|---|---|---|
-| PCL-0 | Public | Shareable after normal review | Fictional templates and public docs |
-| PCL-1 | Internal | Team-limited sharing | Internal process notes without secrets |
-| PCL-2 | Private | Restricted to approved operators/authority | Real runtime mappings and access records |
-| PCL-3 | Restricted | Strict need-to-know handling | Recovery custody details and sensitive security data |
+| PCL-0 | Public-safe by design | Generic governance templates and examples | Publish allowed |
+| PCL-1 | Public with review | Non-sensitive operational summaries | Publish after review |
+| PCL-2 | Private operational | Internal runbooks and sensitive operational context | Do not publish |
+| PCL-3 | Restricted sensitive | Security-sensitive details with high misuse risk | Strictly restricted |
+| PCL-4 | Critical confidential | Recovery/ownership control data and sensitive secrets context | Never public |
 
-## Default handling rule
+## Public, private, restricted examples
 
-Unknown classification defaults to private handling (PCL-2) until explicitly reclassified.
-
-## Public, private, and restricted examples
-
-| Artifact type | Typical PCL |
+| Example | Suggested PCL |
 |---|---|
-| Generic governance template with fictional values | PCL-0 |
-| Internal operator checklist | PCL-1 |
-| Service inventory with real identities | PCL-2 |
-| Break-glass recovery procedure | PCL-3 |
+| Generic policy-gate explanation | PCL-0 |
+| Fictional register sample | PCL-0 |
+| Environment-specific security workflow notes | PCL-2 |
+| Identity recovery process specifics | PCL-3 or PCL-4 |
 
 ## Publication implications
 
-Before publication, verify:
+Before publication:
 
-- source classification,
-- allowed audience,
-- required redaction,
-- approval record for release decision.
-
-If any element is unresolved, defer publication.
+- confirm PCL classification;
+- remove environment-specific sensitive identifiers;
+- preserve governance intent while generalizing implementation details.
 
 ## Redaction implications
 
-Redaction must preserve governance meaning while removing identifying details.
-A safe redaction keeps policy logic understandable and testable.
+Redaction must not break policy meaning.
+Safe redaction removes sensitive identifiers while preserving decision logic and control requirements.
 
-## Handling mixed-content artifacts
+## Defer and block conditions
 
-For mixed public/private content:
+Defer publication when classification is uncertain.
+Block publication when content contains restricted or critical confidential material.
 
-- split sensitive details into restricted artifacts,
-- keep public docs conceptual,
-- use clearly fictional examples,
-- record deferred items for unresolved classifications.
+## Relationship to other concepts
 
-## Decision telemetry expectation
+PCL interacts with ADAL/CDEL/ESAL because authority decisions often reference confidential evidence.
+Confidential evidence can support governance decisions without being publicly disclosed.
 
-Publish/defer/block decisions should record:
+## Classification workflow
 
-- applied classification,
-- rationale,
-- authority source,
-- resulting action.
+Use this quick workflow before sharing any artifact:
 
-## Related concepts and procedures
+1. Identify audience and intended channel.
+2. Classify content at draft time, not only at publication time.
+3. Remove or generalize sensitive identifiers where possible.
+4. Re-check references and embedded snippets for confidentiality drift.
+5. Record final PCL decision in review notes.
 
-- [Policy gates](policy-gates.md)
-- [Project register](../registers/project-register.md)
-- [External service register](../registers/external-service-register.md)
-- [Secrets handling procedure](../procedures/secrets-handling.md)
+## Common mistakes to avoid
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- Treating unknown confidentiality as public-safe.
+- Publishing operational evidence without reclassification.
+- Mixing public examples with private environment details.
+- Assuming redaction is complete without a second pass.
+
+## Related documentation
+
+- [Authority Model](authority-model.md)
+- [Policy Gates](policy-gates.md)
+- [Secrets Handling](../procedures/secrets-handling.md)
+- [External Access Register](../registers/external-access-register.md)

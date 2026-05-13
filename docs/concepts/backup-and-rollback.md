@@ -1,92 +1,106 @@
 # Backup and Rollback
 
-Backup and rollback controls ensure runtime-changing work can be reversed safely when outcomes are incorrect or incomplete.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+
+## Purpose
+
+Backup and rollback gates reduce change risk and prevent irreversible governance mistakes.
+They are mandatory before risky privileged or external operations.
 
 ## Backup gate
 
-Before high-impact change execution, confirm a valid pre-change checkpoint exists.
-The checkpoint must be recent, accessible, and relevant to the intended scope.
+The backup gate verifies that a suitable checkpoint exists before execution.
+A checkpoint must be recent enough for the planned risk class.
+
+Minimum backup-gate requirements:
+
+- scope of change is defined;
+- pre-change checkpoint evidence is recorded;
+- ownership of rollback execution is identified.
 
 ## Rollback gate
 
-Before execution, confirm rollback method, rollback trigger, and success criteria.
-If rollback is undefined, high-impact execution should not proceed.
+The rollback gate verifies that a practical return path exists.
+Rollback is not theoretical; it must be executable with available authority.
+
+Minimum rollback-gate requirements:
+
+- rollback trigger conditions are defined;
+- rollback procedure is documented at a usable level;
+- post-rollback validation criteria are known.
 
 ## Checkpoint rules
 
-- capture checkpoint before change,
-- label checkpoint with action context,
-- verify restore feasibility,
-- keep evidence references for audit.
+Create a checkpoint before:
+
+- privileged host changes;
+- high-impact external service writes;
+- persistence or automation control changes;
+- confidentiality-sensitive publication operations.
+
+For low-risk documentation edits, lightweight checkpoints may be sufficient.
 
 ## Pre-change evidence
 
-Minimum pre-change evidence should include:
+Collect concise pre-change evidence:
 
-- approved scope summary,
-- classification summary (ADAL/CDEL/ESAL/PCL),
-- backup/checkpoint confirmation,
-- rollback method and trigger conditions,
-- approval reference.
+- current state summary;
+- key dependency and target identifiers;
+- gate outcomes and approvals;
+- checkpoint reference identifier.
+
+Do not store plaintext secrets in evidence.
 
 ## Post-change validation
 
-After change execution, validate:
+After execution, record:
 
-- expected functional outcome,
-- no unintended side effects in scoped systems,
-- telemetry completeness,
-- rollback readiness still available.
+- expected versus observed outcome;
+- gate-compliance confirmation;
+- residual risk notes;
+- follow-up actions if needed.
+
+If validation fails, initiate rollback decision flow.
 
 ## Failure handling
 
-If validation fails:
+If execution fails or policy compliance is uncertain:
 
-1. stop further changes,
-2. assess blast radius,
-3. execute rollback according to plan,
-4. capture incident evidence,
-5. report decision and outcome.
+1. stop further changes;
+2. classify incident impact;
+3. decide rollback or defer escalation;
+4. document evidence and decision rationale.
 
 ## Rollback readiness table
 
-| Readiness item | Expected state before change |
-|---|---|
-| Pre-change checkpoint | Available and verified |
-| Rollback procedure | Documented and testable |
-| Trigger criteria | Clear and measurable |
-| Validation checklist | Prepared for post-change checks |
-| Authority reference | Explicit and current |
+| Check | Pass condition | If failed |
+|---|---|---|
+| Checkpoint exists | Pre-change checkpoint confirmed | Defer execution |
+| Rollback method exists | Steps and owner are defined | Defer execution |
+| Required authority available | Execution authority for rollback is confirmed | Block risky action |
+| Validation criteria defined | Measurable post-change checks exist | Defer until defined |
 
 ## Fictional examples
 
-| Scenario | Backup/rollback posture | Decision |
-|---|---|---|
-| Public documentation restructure with no runtime mutation | Low rollback complexity, standard git revert path | Allow |
-| Runtime config migration without checkpoint evidence | Backup gate missing | Defer |
-| External integration change with failing post-checks | Rollback path available | Roll back and report |
+Example A: governance documentation update with branch-level history and reviewer path.
+Result: backup gate satisfied by repository checkpoint.
 
-## Scope boundaries
+Example B: privileged external configuration change without rollback owner.
+Result: defer until rollback ownership is defined.
 
-This document defines governance expectations and decision controls.
-Implementation details for platform-specific restore tools belong in procedure docs.
+Example C: change requested with no pre-change checkpoint for high-impact target.
+Result: block until checkpoint created.
 
-## Telemetry and audit expectations
+## Public-safety constraints
 
-Record:
+This document must remain public-safe.
+Do not include private runtime paths, hostnames, account IDs, tokens, or raw logs.
+Keep references abstract and reusable.
 
-- checkpoint identifier,
-- decision timestamp,
-- gate outcomes,
-- validation results,
-- rollback action (if executed).
+## Related documentation
 
-## Related concepts
-
-- [Policy gates](policy-gates.md)
-- [Authority model](authority-model.md)
-- [Runtime register](../registers/runtime-register.md)
-- [Governance telemetry procedure](../procedures/governance-telemetry.md)
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- [Policy Gates](policy-gates.md)
+- [Authority Model](authority-model.md)
+- [External Access Register](../registers/external-access-register.md)
+- [Server First Contact](../procedures/server-first-contact.md)

@@ -1,107 +1,129 @@
 # Policy Gates
 
-Policy gates are pre-execution controls used to decide whether an action should be allowed, deferred, or blocked.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
-## Gate model
+## Purpose
 
-Each action request is evaluated against multiple gates.
-A gate can pass, defer, or fail.
-Final decision follows the strictest failing condition.
+Policy gates convert governance doctrine into repeatable allow, defer, or block decisions.
+They are evaluated before execution of privileged, external, or confidentiality-sensitive actions.
 
-## Authority gate
+## Core gate set for v0.1.3
 
-Checks that authority source is explicit and valid for requested scope.
-If authority proof is missing, decision defaults to defer or block.
+1. Authority gate
+2. Classification and scope gate
+3. Backup and rollback gate
+4. External access and register gate
+5. Confidentiality and publication gate
+6. Automation and persistence gate
 
-## Scope gate
+## 1) Authority gate
 
-Checks that requested action matches approved task boundaries.
-Out-of-scope expansions defer for review.
+Checks whether accountable authority and delegated operator scope are valid.
 
-## Backup gate
+Allow when:
 
-Checks that pre-change checkpoint or backup evidence exists where required.
-If rollback prerequisite is missing, block runtime-changing actions.
+- authority is explicit and in-scope;
+- no self-granting behavior.
 
-## Rollback gate
+Defer when:
 
-Checks that rollback method and success criteria are defined and feasible.
-No rollback path means no high-impact change execution.
+- approval is missing or ambiguous;
+- delegated scope is unclear.
 
-## Confidentiality gate
+Block when:
 
-Checks PCL classification and publication handling.
-Unknown classification defaults to private handling and typically defers publication.
+- requested action violates explicit authority boundaries.
 
-## External-service gate
+## 2) Classification and scope gate
 
-Checks ESAL scope, ownership/recovery custody clarity, and access-chain validation.
-Missing custody metadata or approval evidence should defer or block.
+Checks ADAL/CDEL/ESAL/PCL classification and action scope consistency.
 
-## GitHub/repository gate
+Allow when classifications are explicit and consistent.
+Defer when one or more classifications are unknown.
+Block when requested action conflicts with classified risk bounds.
 
-Checks branch target, remote safety posture, and contribution policy.
-Normal work targets origin fork branch.
-Upstream push requires explicit instruction.
+## 3) Backup and rollback gate
 
-## Automation/persistence gate
+Checks whether risky actions have checkpoint and rollback readiness.
 
-Checks whether persistent automation changes are explicitly approved.
-Unapproved persistence changes defer or block.
+Allow when pre-change checkpoint exists and rollback method is defined.
+Defer when evidence is partial.
+Block when risky changes are requested without rollback readiness.
 
-## Proposal-only gate
+## 4) External access and register gate
 
-When scope is proposal-only, execution steps are blocked.
-Allowed output is documentation, evidence checklist, and recommendation.
+Checks whether external targets are registered and access-chain evidence is available.
+
+Allow when target registration and approval are complete.
+Defer when target metadata is incomplete.
+Block when unregistered privileged external action is requested.
+
+## 5) Confidentiality and publication gate
+
+Checks that publication and evidence sharing respect PCL boundaries.
+
+Allow when content is public-safe.
+Defer when classification review is needed.
+Block when restricted or confidential data would be exposed.
+
+## 6) Automation and persistence gate
+
+Checks creation or modification of persistent automation and long-lived governance effects.
+
+Allow when explicitly approved and auditable.
+Defer when persistence impact is unclear.
+Block when uncontrolled automation would bypass governance authority.
 
 ## Decision table
 
-| Gate outcome summary | Decision |
-|---|---|
-| All required gates pass | Allow |
-| One or more gates require authority/evidence completion | Defer |
-| Safety/confidentiality/authority violation found | Block |
+| Gate | Allow criteria | Defer criteria | Block criteria |
+|---|---|---|---|
+| Authority | Explicit accountable authority and delegated scope | Missing approval reference | Explicit authority violation |
+| Classification and scope | ADAL/CDEL/ESAL/PCL resolved | Any unknown classification | Action exceeds classified bounds |
+| Backup and rollback | Checkpoint + rollback readiness confirmed | Evidence incomplete | Risky change without rollback path |
+| External access and register | Target entry and access chain validated | Metadata incomplete | Unregistered privileged external action |
+| Confidentiality and publication | PCL reviewed and safe for intended audience | Classification uncertain | Restricted data exposure risk |
+| Automation and persistence | Explicit approval and auditability | Persistence impact unclear | Uncontrolled long-lived automation |
 
 ## Required evidence table
 
-| Gate | Minimum evidence |
+| Evidence item | Why required |
 |---|---|
-| Authority gate | Explicit authority source and scope |
-| Scope gate | Task boundary statement and impacted areas |
-| Backup gate | Checkpoint record or approved backup evidence |
-| Rollback gate | Rollback method and validation criteria |
-| Confidentiality gate | PCL classification and publication decision |
-| External-service gate | ESAL mapping, custody status, approval path |
-| Repository gate | Remote/branch verification and push target |
-| Automation gate | Explicit approval for persistent automation |
+| Classification summary | Proves action risk is understood |
+| Scope and target statement | Prevents scope drift |
+| Approval reference | Confirms human authority chain |
+| Pre-change checkpoint reference | Enables controlled rollback |
+| Post-change validation summary | Confirms outcome and safety |
 
 ## Fictional examples
 
-| Example action | Gate outcome | Result |
-|---|---|---|
-| Update public concept docs in feature branch | Authority/scope/repo gates pass | Allow |
-| Change org-wide repository protection settings without approval | External-service and authority gates fail | Block |
-| Execute maintenance action with incomplete rollback evidence | Rollback gate incomplete | Defer |
+Example A: branch documentation push to owned fork with clear scope and no sensitive content.
+Likely result: allow.
 
-## Telemetry expectation
+Example B: external dashboard policy update with missing approval and unknown custody.
+Likely result: defer.
 
-Each decision should emit structured telemetry including:
+Example C: privileged host modification requested with no rollback readiness.
+Likely result: block.
 
-- action summary,
-- applied classifications,
-- gate outcomes,
-- final decision,
-- rationale,
-- evidence references.
+## Telemetry expectations
 
-## Related concepts
+Each decision should produce concise telemetry:
 
-- [Authority model](authority-model.md)
+- action summary;
+- gate results;
+- decision outcome;
+- evidence references;
+- defer or block rationale.
+
+Telemetry must avoid plaintext secrets and sensitive private artifacts.
+
+## Related documentation
+
+- [Authority Model](authority-model.md)
 - [ADAL](adal.md)
 - [CDEL](cdel.md)
 - [ESAL](esal.md)
 - [PCL](pcl.md)
-- [Backup and rollback](backup-and-rollback.md)
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+- [Backup and Rollback](backup-and-rollback.md)
