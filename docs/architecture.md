@@ -1,59 +1,61 @@
-# Yellow-Control architecture
+# Architecture
 
-This document provides public-safe governance architecture views for decision flow, classification, register relationships, and private-to-public extraction safety.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
-## 1) Governance decision flow
+This architecture describes Yellow-Control core governance only.
+External package management can be referenced as a separate layer, not merged into core doctrine.
+
+## Core governance flow
 
 ```mermaid
 flowchart TD
-  A[Action request] --> B[Classify action]
+  A[Action request] --> B[Classify ADAL CDEL ESAL PCL]
   B --> C[Apply policy gates]
-  C --> D{Decision outcome}
-  D -->|Allow| E[Execute within approved scope]
-  D -->|Defer| F[Request missing authority or evidence]
-  D -->|Block| G[Stop action and report]
-  E --> H[Emit governance telemetry]
-  F --> H
-  G --> H
+  C --> D{Allow Defer Block}
+  D --> E[Governed execution or governance response]
+  E --> F[Telemetry and evidence references]
 ```
 
-## 2) ADAL/CDEL/ESAL/PCL classification flow
+## Classification and scope
 
 ```mermaid
 flowchart TD
-  A[Proposed action] --> B[Classify ADAL]
-  B --> C[Classify CDEL]
-  C --> D[Classify ESAL]
-  D --> E[Classify PCL]
-  E --> F{Classification complete?}
-  F -->|No| G[Default handling: defer or block]
-  F -->|Yes| H[Collect required evidence]
-  H --> I[Proceed to policy-gate decision]
+  A[Action candidate] --> B[Classify ADAL]
+  A --> C[Classify CDEL]
+  A --> D[Classify ESAL]
+  A --> E[Classify PCL]
+  B --> F[Scope and authority evaluation]
+  C --> F
+  D --> F
+  E --> F
+  F --> G{Known and approved}
+  G -->|Yes| H[Allow path]
+  G -->|Partial| I[Defer path]
+  G -->|No| J[Block path]
 ```
 
-## 3) Register relationship diagram
+## Register and procedure relationship
 
 ```mermaid
 flowchart LR
-  P[Project register] --> R[Runtime register]
-  R --> S[Skill register]
-  S --> E[External service register]
-  P --> E
-  R --> E
+  A[External access register] --> B[Server first contact]
+  A --> C[External access onboarding]
+  A --> D[GitHub governance]
+  A --> E[Secrets handling]
+  B --> F[Governance telemetry]
+  C --> F
+  D --> F
+  E --> F
 ```
 
-## 4) Source-to-public extraction safety flow
+## Boundary with external package management
 
 ```mermaid
 flowchart TD
-  A[Private reference materials] --> B[Public-safe extraction]
-  B --> C[Redaction and generalization]
-  C --> D[Public documentation draft]
-  D --> E[Validation checks]
-  E --> F{Pass?}
-  F -->|Yes| G[Publish to public repository]
-  F -->|No| H[Fix issues and revalidate]
+  A[Yellow-Control core docs and skill] --> B[Policy decisions and gates]
+  C[External package management layer] --> D[Implementation-specific artifacts]
+  B --> E[Reference external package only when needed]
+  D --> E
+  E --> F[No private implementation details in public core docs]
 ```
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13

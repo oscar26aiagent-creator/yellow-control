@@ -1,57 +1,79 @@
-# Yellow-Control documentation index
+# Documentation Index
 
-This index defines reading order, audience-focused paths, and current milestone status for the v0.1.3 clean architecture rebuild.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
 ## Reading order
 
 1. [README.md](../README.md)
-2. [docs/architecture.md](architecture.md)
-3. [docs/concepts/authority-model.md](concepts/authority-model.md)
-4. [docs/concepts/adal.md](concepts/adal.md)
-5. [docs/concepts/cdel.md](concepts/cdel.md)
-6. [docs/concepts/esal.md](concepts/esal.md)
-7. [docs/concepts/pcl.md](concepts/pcl.md)
-8. [docs/concepts/policy-gates.md](concepts/policy-gates.md)
-9. [docs/registers/external-service-register.md](registers/external-service-register.md)
-10. [docs/hermes/skill-usage.md](hermes/skill-usage.md)
+2. [Architecture](architecture.md)
+3. [Authority model](concepts/authority-model.md)
+4. [Policy gates](concepts/policy-gates.md)
+5. [Backup and rollback](concepts/backup-and-rollback.md)
+6. [External access register](registers/external-access-register.md)
+7. [Procedures](#procedures)
+8. [Hermes skill docs](#hermes-skill)
 
-## Audience paths
+## Role-based paths
 
 ### For system administrators
 
-Start with [docs/architecture.md](architecture.md), then [docs/concepts/adal.md](concepts/adal.md), [docs/concepts/policy-gates.md](concepts/policy-gates.md), and [docs/procedures/runtime-maintenance-governance.md](procedures/runtime-maintenance-governance.md).
+- [ADAL](concepts/adal.md)
+- [CDEL](concepts/cdel.md)
+- [Server first contact](procedures/server-first-contact.md)
+- [Backup and rollback](concepts/backup-and-rollback.md)
 
 ### For cyber-security administrators
 
-Start with [docs/concepts/pcl.md](concepts/pcl.md), [docs/concepts/esal.md](concepts/esal.md), [docs/concepts/policy-gates.md](concepts/policy-gates.md), and [docs/procedures/secrets-handling.md](procedures/secrets-handling.md).
+- [Authority model](concepts/authority-model.md)
+- [ESAL](concepts/esal.md)
+- [PCL](concepts/pcl.md)
+- [Secrets handling](procedures/secrets-handling.md)
 
-### For DevSecOps/platform teams
+### For DevSecOps and platform teams
 
-Start with [docs/architecture.md](architecture.md), [docs/concepts/cdel.md](concepts/cdel.md), [docs/concepts/policy-gates.md](concepts/policy-gates.md), and [docs/procedures/github-governance.md](procedures/github-governance.md).
+- [Policy gates](concepts/policy-gates.md)
+- [External access onboarding](procedures/external-access-onboarding.md)
+- [GitHub governance](procedures/github-governance.md)
+- [Governance telemetry](procedures/governance-telemetry.md)
 
 ### For Hermes skill reviewers
 
-Start with [docs/hermes/skill-usage.md](hermes/skill-usage.md), [docs/hermes/skill-hub-submission-readiness.md](hermes/skill-hub-submission-readiness.md), and [skills/yellow-control-governance/SKILL.md](../skills/yellow-control-governance/SKILL.md).
+- [Skill usage](hermes/skill-usage.md)
+- [Skill Hub submission readiness](hermes/skill-hub-submission-readiness.md)
+- [Skill definition](../skills/yellow-control-governance/SKILL.md)
 
 ### For contributors
 
-Start with [README.md](../README.md), review [docs/audits/v0.1.3-baseline-audit.md](audits/v0.1.3-baseline-audit.md), [docs/audits/v0.1.3-acceptance-map.md](audits/v0.1.3-acceptance-map.md), then align edits with [docs/architecture.md](architecture.md).
+- [Architecture](architecture.md)
+- [Concepts](concepts/authority-model.md)
+- [Register schema](registers/external-access-register.md)
+- [Examples](../examples/external-access-register.sample.yaml)
 
-## Status by documentation area
+## Procedures
 
-| Area | Current status |
+- [Server first contact](procedures/server-first-contact.md)
+- [External access onboarding](procedures/external-access-onboarding.md)
+- [Secrets handling](procedures/secrets-handling.md)
+- [GitHub governance](procedures/github-governance.md)
+- [Governance telemetry](procedures/governance-telemetry.md)
+
+## Hermes skill
+
+- [Skill usage](hermes/skill-usage.md)
+- [Skill Hub submission readiness](hermes/skill-hub-submission-readiness.md)
+
+## Audit trail
+
+- [Milestone 0 baseline audit](audits/v0.1.3-baseline-audit.md)
+- [Milestone 0 acceptance map](audits/v0.1.3-acceptance-map.md)
+
+## Status by area
+
+| Area | Status |
 |---|---|
-| Front door docs (README, index, architecture) | Current |
-| Concept split docs | Current |
-| Register docs and examples | Current |
-| Procedures and operator workflows | Current |
-| Hermes skill alignment package | Current |
-| Final validation package | Planned for Milestone 6 |
-
-## Milestone 0 audit references
-
-- [docs/audits/v0.1.3-baseline-audit.md](audits/v0.1.3-baseline-audit.md)
-- [docs/audits/v0.1.3-acceptance-map.md](audits/v0.1.3-acceptance-map.md)
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+| Core concepts | current for narrowed v0.1.3 scope |
+| External access register | current |
+| Procedures | current for core governance scope |
+| Hermes skill docs | current |
+| Additional project/runtime/skill-registry systems | out of scope for this version |
