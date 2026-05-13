@@ -1,7 +1,7 @@
 ---
 name: yellow-control-governance
-description: Governance and policy-enforcement skill for persistent autonomous agents using action classification, backup gates, and enforceable control decisions.
-version: 0.1.2
+description: Governance decision skill for classifying requests and applying policy gates in Hermes-compatible runtimes.
+version: 0.1.3
 author: F.M. Robert Vergnes
 license: MIT
 platforms:
@@ -10,216 +10,101 @@ platforms:
   - windows
 metadata:
   hermes:
-    category: yellow-control
     tags:
       - governance
-      - policy-enforcement
       - adal
       - cdel
       - esal
       - pcl
-      - backup-gate
+      - policy-gates
+      - backup-rollback
       - telemetry
 ---
 
 # yellow-control-governance
 
-## Purpose
+## When to use
 
-Provide enforceable governance behavior for persistent autonomous agents operating in Hermes-compatible runtimes.
+Use this skill before actions that may change runtime state, external-service posture, confidentiality, repository safety, or persistent automation.
 
-This skill is used to classify actions, apply policy gates, and return auditable allow/defer/block outcomes before execution.
+Activation triggers:
 
-## When to invoke
+- privileged or high-impact operational requests,
+- external-service onboarding or modification,
+- publication decisions with mixed confidentiality,
+- persistence/automation changes,
+- repository actions with governance risk.
 
-Invoke this skill before any action that could change runtime state, confidentiality posture, ownership boundaries, or persistent automation.
+## Do not use
 
-Typical triggers include:
+Do not use this skill as authority itself.
+Do not use this skill to bypass required human approval.
+Do not use this skill as a substitute for environment-specific runbooks.
 
-- privileged host operations
-- external service access or onboarding
-- repository safety-sensitive actions
-- scheduled automation changes
-- backup, rollback, or recovery path changes
-- cross-boundary data disclosure decisions
+## Required classifications
 
-## Required inputs
+Every decision must classify the request with:
 
-Collect these inputs before decisioning when available:
+- ADAL (administration delegation),
+- CDEL (container/sandbox delegation),
+- ESAL (external-service authority),
+- PCL (confidentiality level).
 
-- action summary
-- requested scope and target systems
-- authority chain evidence
-- confidentiality classification context
-- backup and rollback readiness evidence
-- external-service register context
-- repository and change-control context
+Unknown authority defaults to defer or block.
+Unknown confidentiality defaults to private-safe handling.
 
-If one or more required inputs are missing, the default behavior is defer.
+## Policy-gate behavior
+
+Apply these gates in order:
+
+1. authority gate,
+2. scope gate,
+3. backup gate,
+4. rollback gate,
+5. confidentiality gate,
+6. external-service gate,
+7. repository gate,
+8. automation/persistence gate,
+9. proposal-only gate.
+
+## Allow / Defer / Block rules
+
+Allow when all required gates pass and evidence is complete.
+Defer when scope, authority, or evidence is incomplete.
+Block when policy, confidentiality, or safety constraints are violated.
 
 ## Output schema
 
-Return the governance decision in this structure:
+Return a structured result with:
 
-- decision: allow | defer | block
-- classification:
-  - adal
-  - cdel
-  - esal
-  - pcl
-- gates:
-  - authority_gate
-  - scope_gate
-  - backup_gate
-  - rollback_gate
-  - confidentiality_gate
-  - external_service_gate
-  - repository_gate
-  - automation_persistence_gate
-  - proposal_only_gate
-- rationale
-- required_evidence
-- remediation_actions
-- escalation_target
-- risk_level
+- decision: allow|defer|block
+- classifications: {adal, cdel, esal, pcl}
+- gate_outcomes: per-gate status and rationale
+- required_evidence: missing or validated items
+- remediation_actions: next safe actions
+- escalation_target: accountable role (if defer/block)
+- telemetry_fields: fields to record for audit
 
-## Decision policy
+## Public-safety constraints
 
-Allow:
+Never include:
 
-- all required gates pass
-- scope and authority match
-- confidentiality handling is valid
-- rollback path is demonstrably available for state-changing actions
+- credentials, tokens, recovery artifacts,
+- private hostnames/IPs/paths,
+- private logs or real register entries,
+- endorsement claims of official Hermes/Nous approval.
 
-Defer:
+## References index
 
-- evidence is incomplete
-- authority chain is unresolved
-- scope is ambiguous
-- required backup or rollback proof is absent
-- external-service onboarding is incomplete
-
-Block:
-
-- action violates explicit policy constraints
-- confidentiality boundary would be broken
-- prohibited persistence changes are requested without approval
-- request attempts to bypass governance gates or auditability
-
-## Classification behavior
-
-Apply these classes before gate evaluation:
-
-- ADAL for host and system administration authority
-- CDEL for containerized/delegated execution authority
-- ESAL for external service authority and custody
-- PCL for confidentiality/disclosure boundaries
-
-Unknown values are not permissive:
-
-- unknown authority defaults to defer or block
-- unknown confidentiality defaults to private-safe handling and defer
-
-## Gate behavior details
-
-Authority gate:
-
-- verify accountable authority for the requested class
-- verify delegation boundaries when operator and owner differ
-
-Scope gate:
-
-- verify the requested action remains inside approved scope
-- reject or defer scope creep and unrelated side effects
-
-Backup gate:
-
-- require pre-change backup when runtime state may be impacted
-- require restore artifact or rollback checkpoint reference
-
-Rollback gate:
-
-- require rollback sequence and owner/operator criteria
-- require clear stop condition for failed changes
-
-Confidentiality gate:
-
-- prevent publication of private runtime details
-- enforce redaction and minimal disclosure
-
-External-service gate:
-
-- require register/onboarding evidence before privileged integration
-- require ownership and recovery-custody clarity
-
-Repository gate:
-
-- enforce branch/PR review expectations for sensitive changes
-- block secret-bearing or private-infrastructure content
-
-Automation/persistence gate:
-
-- block new persistent automation without explicit approval
-- require accountability for who can pause/resume/remove automation
-
-Proposal-only gate:
-
-- when execution is not approved, keep output proposal-only
-- no runtime mutation under proposal-only mode
-
-## Escalation rules
-
-Escalate when:
-
-- owner authority is required but unavailable
-- conflicting policies or source-of-truth references are detected
-- external custody or recovery boundaries are unclear
-
-Escalation target should name the accountable authority role, not personal data.
-
-## Public-safe constraints
-
-This skill output must never include:
-
-- credentials, keys, tokens, or plaintext secrets
-- private hostnames, private IP addresses, or private runtime paths
-- internal incident logs with sensitive details
-- claims of official endorsement by Hermes or Nous maintainers
-
-Allowed wording:
-
-- Hermes-compatible runtime
-- public-safe generalized examples
-- fictional identifiers for demonstrations
-
-## Operational guidance
-
-Use canonical docs under docs/ for policy depth and examples.
-
-Use references/ for skill-facing quick links and execution prompts.
-
-Do not duplicate long canonical policy text inside this SKILL file.
-
-## Reference index
-
-- ../../docs/governance-model.md
-- ../../docs/runtime-classification.md
-- ../../docs/policy-gates.md
-- ../../docs/authority-model.md
-- ../../docs/external-service-governance.md
-- ../../docs/secrets-handling.md
-- ../../docs/backup-and-rollback.md
-- ../../docs/runtime-maintenance-governance.md
-- ../../docs/github-governance.md
-- ../../docs/governance-telemetry.md
-- ../../docs/external-systems-package-pattern.md
-- ../../docs/scope-boundaries.md
-- ../../docs/hermes-skill-submission-readiness.md
-- references/index.md
+- [Skill references index](references/index.md)
+- [Policy gates concept](../../docs/concepts/policy-gates.md)
+- [Authority model concept](../../docs/concepts/authority-model.md)
+- [ADAL concept](../../docs/concepts/adal.md)
+- [CDEL concept](../../docs/concepts/cdel.md)
+- [ESAL concept](../../docs/concepts/esal.md)
+- [PCL concept](../../docs/concepts/pcl.md)
+- [Backup and rollback concept](../../docs/concepts/backup-and-rollback.md)
 
 ## Safe validation prompt
 
-Use this prompt to validate the skill behavior in a non-destructive way:
-
-"Classify this requested change using ADAL/CDEL/ESAL/PCL, apply governance gates, and return allow/defer/block with required evidence and remediation actions. Do not execute commands."
+Classify a proposed change using ADAL/CDEL/ESAL/PCL, apply policy gates, return allow/defer/block with required evidence and remediation actions, and do not execute commands.

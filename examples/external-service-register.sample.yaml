@@ -1,0 +1,13 @@
+# Fictional example only
+service_name: "example-code-host"
+service_type: "code-hosting"
+esal_level: "ESAL-2"
+accountable_authority: "governance-owner@example.invalid"
+maintainer_operator: "platform-maintainer@example.invalid"
+access_method: "ssh-key + scoped token"
+recovery_custody_status: "documented"
+automation_allowed: true
+approval_required: "required for org-level settings changes"
+audit_cadence: "monthly"
+public_private_notes: "fictional sample"
+last_reviewed: "2026-05-11"
