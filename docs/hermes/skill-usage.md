@@ -1,45 +1,35 @@
-# Hermes skill usage for yellow-control-governance
+# Skill Usage
 
-This guide explains how to inspect and use the governance skill in Hermes-compatible runtimes.
+Status: v0.1.3 clean architecture rebuild candidate.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
-## Scope
+## Purpose
 
-This document covers usage patterns, validation prompts, and expected output shape.
-It does not claim installation commands beyond official Hermes documentation.
+Explain how to inspect and use the Yellow-Control governance skill in Hermes-compatible runtimes.
 
-Official references:
+## Basic usage pattern
 
-- https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills
-- https://hermes-agent.nousresearch.com/docs/user-guide/features/skills
-
-## Usage flow
-
-1. Load the skill in a session.
-2. Provide action summary and context.
-3. Request ADAL/CDEL/ESAL/PCL classification.
-4. Request policy-gate decision output.
-5. Review allow/defer/block rationale.
+1. Load and inspect the skill.
+2. Provide action context.
+3. Require ADAL/CDEL/ESAL/PCL classification.
+4. Require allow/defer/block output with gate rationale.
 
 ## Example validation prompts
 
-- "Classify this change and apply policy gates. Return decision and required evidence. Do not execute commands."
-- "Given this external-service change request, return defer/block criteria and escalation target."
+- Classify this action and return allow/defer/block with gate outcomes.
+- Evaluate first-contact request for a new external server target.
+- Check whether backup/rollback gate is satisfied before risky change.
 
 ## Expected output shape
 
-- decision: allow|defer|block
-- classifications: adal/cdel/esal/pcl
-- gate_outcomes: authority, scope, backup, rollback, confidentiality, external-service, repository, automation, proposal-only
-- required_evidence
-- remediation_actions
-- escalation_target
-- telemetry_fields
+- decision
+- classifications
+- gate_results
+- evidence_refs
+- rationale
+- next_actions
 
-## Safety expectations
+## Notes
 
-- no secret material in output,
-- no private host or account identifiers,
-- no implied official endorsement.
-
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+This documentation avoids untested installation claims.
+Use current Hermes documentation for runtime-specific install and configuration steps.

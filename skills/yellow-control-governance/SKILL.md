@@ -1,13 +1,11 @@
 ---
 name: yellow-control-governance
-description: Governance decision skill for classifying requests and applying policy gates in Hermes-compatible runtimes.
+description: Public-safe governance skill for authority classification, policy gates, and external access controls.
 version: 0.1.3
-author: F.M. Robert Vergnes
+author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 license: MIT
 platforms:
   - linux
-  - macos
-  - windows
 metadata:
   hermes:
     tags:
@@ -16,95 +14,52 @@ metadata:
       - cdel
       - esal
       - pcl
-      - policy-gates
-      - backup-rollback
-      - telemetry
+      - external-access
+      - allow-defer-block
 ---
 
 # yellow-control-governance
 
 ## When to use
 
-Use this skill before actions that may change runtime state, external-service posture, confidentiality, repository safety, or persistent automation.
-
-Activation triggers:
-
-- privileged or high-impact operational requests,
-- external-service onboarding or modification,
-- publication decisions with mixed confidentiality,
-- persistence/automation changes,
-- repository actions with governance risk.
+Use this skill when actions involve privileged authority, external services, confidentiality decisions, backup/rollback gates, or governance decision reporting.
 
 ## Do not use
 
-Do not use this skill as authority itself.
-Do not use this skill to bypass required human approval.
-Do not use this skill as a substitute for environment-specific runbooks.
+Do not use this skill as a deployment script, runtime installer, or substitute for human accountable authority.
 
-## Required classifications
+## Required classification
 
-Every decision must classify the request with:
+Before deciding, classify action context using ADAL, CDEL, ESAL, and PCL.
+Unknown classification defaults to defer.
 
-- ADAL (administration delegation),
-- CDEL (container/sandbox delegation),
-- ESAL (external-service authority),
-- PCL (confidentiality level).
+## Core behavior
 
-Unknown authority defaults to defer or block.
-Unknown confidentiality defaults to private-safe handling.
-
-## Policy-gate behavior
-
-Apply these gates in order:
-
-1. authority gate,
-2. scope gate,
-3. backup gate,
-4. rollback gate,
-5. confidentiality gate,
-6. external-service gate,
-7. repository gate,
-8. automation/persistence gate,
-9. proposal-only gate.
-
-## Allow / Defer / Block rules
-
-Allow when all required gates pass and evidence is complete.
-Defer when scope, authority, or evidence is incomplete.
-Block when policy, confidentiality, or safety constraints are violated.
+1. Classify ADAL/CDEL/ESAL/PCL.
+2. Consult external access register before external or server work.
+3. Enforce server-first-contact procedure for first privileged contact.
+4. Enforce backup/rollback gate for risky actions.
+5. Return allow, defer, or block with concise rationale.
+6. Never self-grant authority and never expose secrets.
 
 ## Output schema
 
-Return a structured result with:
+- decision: allow | defer | block
+- classifications: { adal, cdel, esal, pcl }
+- gates: { authority, scope, backup_rollback, external_access, confidentiality, automation_persistence }
+- evidence_refs: []
+- rationale: string
+- next_actions: []
 
-- decision: allow|defer|block
-- classifications: {adal, cdel, esal, pcl}
-- gate_outcomes: per-gate status and rationale
-- required_evidence: missing or validated items
-- remediation_actions: next safe actions
-- escalation_target: accountable role (if defer/block)
-- telemetry_fields: fields to record for audit
+## Defer and block rules
 
-## Public-safety constraints
+Defer when approval, classification, or required evidence is incomplete.
+Block when action violates explicit governance boundaries or confidentiality constraints.
 
-Never include:
+## References
 
-- credentials, tokens, recovery artifacts,
-- private hostnames/IPs/paths,
-- private logs or real register entries,
-- endorsement claims of official Hermes/Nous approval.
-
-## References index
-
-- [Skill references index](references/index.md)
-- [Policy gates concept](../../docs/concepts/policy-gates.md)
-- [Authority model concept](../../docs/concepts/authority-model.md)
-- [ADAL concept](../../docs/concepts/adal.md)
-- [CDEL concept](../../docs/concepts/cdel.md)
-- [ESAL concept](../../docs/concepts/esal.md)
-- [PCL concept](../../docs/concepts/pcl.md)
-- [Backup and rollback concept](../../docs/concepts/backup-and-rollback.md)
-
-## Safe validation prompt
-
-Classify a proposed change using ADAL/CDEL/ESAL/PCL, apply policy gates, return allow/defer/block with required evidence and remediation actions, and do not execute commands.
+- references/index.md
+- ../../docs/concepts/authority-model.md
+- ../../docs/concepts/policy-gates.md
+- ../../docs/registers/external-access-register.md
+- ../../docs/procedures/server-first-contact.md

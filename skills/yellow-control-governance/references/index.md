@@ -1,31 +1,28 @@
-# yellow-control-governance references index
+# Yellow-Control Governance References
 
-Use this index for progressive disclosure. Keep SKILL.md concise and use these references for detail.
-
-## Canonical concept references
-
-- [Authority model](../../../docs/concepts/authority-model.md)
-- [ADAL](../../../docs/concepts/adal.md)
-- [CDEL](../../../docs/concepts/cdel.md)
-- [ESAL](../../../docs/concepts/esal.md)
-- [PCL](../../../docs/concepts/pcl.md)
-- [Policy gates](../../../docs/concepts/policy-gates.md)
-- [Backup and rollback](../../../docs/concepts/backup-and-rollback.md)
-
-## Register references
-
-- [External service register](../../../docs/registers/external-service-register.md)
-- [Project register](../../../docs/registers/project-register.md)
-- [Runtime register](../../../docs/registers/runtime-register.md)
-- [Skill register](../../../docs/registers/skill-register.md)
-
-## Procedure references
-
-- [External service onboarding](../../../docs/procedures/external-service-onboarding.md)
-- [Runtime maintenance governance](../../../docs/procedures/runtime-maintenance-governance.md)
-- [GitHub governance](../../../docs/procedures/github-governance.md)
-- [Secrets handling](../../../docs/procedures/secrets-handling.md)
-- [Governance telemetry](../../../docs/procedures/governance-telemetry.md)
-
+Status: v0.1.3 clean architecture rebuild candidate.
 Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex; Hermes Agent v0.13
+
+This index links the canonical governance references used by the skill.
+
+## Core concepts
+
+- ../../../docs/concepts/authority-model.md
+- ../../../docs/concepts/adal.md
+- ../../../docs/concepts/cdel.md
+- ../../../docs/concepts/esal.md
+- ../../../docs/concepts/pcl.md
+- ../../../docs/concepts/policy-gates.md
+- ../../../docs/concepts/backup-and-rollback.md
+
+## Register
+
+- ../../../docs/registers/external-access-register.md
+
+## Procedures
+
+- ../../../docs/procedures/server-first-contact.md
+- ../../../docs/procedures/external-access-onboarding.md
+- ../../../docs/procedures/secrets-handling.md
+- ../../../docs/procedures/github-governance.md
+- ../../../docs/procedures/governance-telemetry.md
